@@ -33,9 +33,9 @@ function processIncomingEvent(data, port) {
                     //Valid card
                     if (action === 'in') {
                         //Event -> 1. message to display with name
-                        sendDataToArduino(port, 'showmessage|' + card[0].owner_name);
+                        sendDataToArduino(port, ['showmessage', card[0].owner_name]);
                         //Event -> 2. open door
-                        sendDataToArduino(port, 'door|open');
+                        sendDataToArduino(port, ['door', 'open']);
                         //Update last usage date and status to active
                         controller.updateCard(card[0]._id, 'active');
                     } else if (action === 'out') {
@@ -48,7 +48,7 @@ function processIncomingEvent(data, port) {
                     //Invalid card
 
                     //Event -> 1. blik red led
-                    sendDataToArduino(port, 'wrongcard');
+                    sendDataToArduino(port, ['wrongcard']);
                     //TODO: Send notificaiton to phone
                 }
             });
@@ -59,23 +59,27 @@ function processIncomingEvent(data, port) {
     }
 }
 
-const MAX_DATA_LENGTH = 32;
+const MAX_MESSAGE_LENGTH = 32;
 
 function sendDataToArduino(port, data) {
-    if (data.length > MAX_DATA_LENGTH) {
-        data = data.substring(0, MAX_DATA_LENGTH);
-    } else {
-        let len = data.length;
+    var message = '';
+    for (d of data) {
+        message += d + '|';
+    }
 
-        for (let i = data.length; i < MAX_DATA_LENGTH; i++) {
-            data += ' ';
+    if (message.length > MAX_MESSAGE_LENGTH) {
+        console.error('Error, too long message');
+        return;
+    } else {
+        for (let i = message.length; i < MAX_MESSAGE_LENGTH; i++) {
+            message += ' ';
         }
     }
 
-    port.write(data + '\n', (err) => {
+    port.write(message + '\n', (err) => {
         if (err) {
             console.log('Error on write: ', err.message);
         }
-        console.log('To Arduino: ' + data);
+        console.log('To Arduino: ' + message);
     });
 }
