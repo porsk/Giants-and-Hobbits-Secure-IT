@@ -54,7 +54,6 @@ exports.sendNotification = (title, message) => {
         console.log('Notification sending error: ' + err.message);
     });
 };
-<<<<<<< HEAD
 
 exports.getConfig = (req, res) => {
     HomeConfiguration.find({}, (err, config) => {
@@ -75,5 +74,3 @@ exports.updateConfig = (req, res) => {
         }
     });
 };
-=======
->>>>>>> 9872ec0cb98ad1f80c34065122c958e89b547380
