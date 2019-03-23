@@ -29,7 +29,7 @@ export class PushNotificationService {
     }
 
     addPushSubscriber(subscription: any) {
-        return this.http.post('http://localhost:3000/notifications', subscription);
+        return this.http.post('http://localhost:3000/api/notification', subscription);
     }
 
 }

@@ -1,7 +1,10 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
-    morgan = require('morgan');
+    morgan = require('morgan'),
+    webpush = require('web-push'),
+    cors = require('cors'),
+    router = require('./api/routes');
 
 var port = process.env.PORT || 3000,
     mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/home-security';
@@ -21,8 +24,11 @@ mongoose.connect(mongoUrl, { useMongoClient: true }, (error) => {
 });
 
 app.use(morgan('tiny'));
+app.use(cors());
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/api', router);
 
 app.listen(port, () => {
     console.log('HTTP API server is up and running.');
