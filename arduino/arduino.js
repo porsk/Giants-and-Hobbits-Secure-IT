@@ -8,6 +8,11 @@ var controller = require('./controller');
     owner_name: 'Krisztian',
 });*/
 
+controller.validateCard('123456').then((data) => {
+    console.log(data[0]);
+    controller.updateCard(data[0]._id, Date.now(), 'active');
+});
+
 exports.establishConnection = () => {
     const port = new SerialPort('COM12', { baudRate: 9600 });
     const parser = port.pipe(new Readline({ delimiter: '\n' }));
@@ -23,34 +28,35 @@ exports.establishConnection = () => {
 };
 
 function processIncomingEvent(data, port) {
-    console.log('New event from the arduino.');
-    console.log(data);
-
     switch (data[0]) {
         case 'card': //A card event occured
-            if (data[2] === 'in') {
-                // Card touched
-                controller.validateCard('123456').then((data) => {
-                    if (data[0]) {
-                        //Valid card
+            let curr_card_key = data[1];
+            let action = data[2];
 
+            controller.validateCard(curr_card_key).then((card) => {
+                if (card[0]) {
+                    //Valid card
+                    if (action === 'in') {
                         //Event -> 1. message to display with name
-                        sendDataToArduino(port, 'showmessage|Hello ' + data[0].owner_name + '!');
+                        sendDataToArduino(port, 'showmessage|Hello ' + card[0].owner_name + '!');
                         //Event -> 2. open door
                         sendDataToArduino(port, 'door|open');
+                        //Update last usage date and status to active
+                        controller.updateCard(card[0]._id, Date.now(), 'active');
+                    } else if (action === 'out') {
+                        //Update last usage date and status to inactive
+                        controller.updateCard(card[0]._id, Date.now(), 'inactive');
                     } else {
-                        //Invalid card
-
-                        //Event -> 1. blik red led
-                        sendDataToArduino(port, 'wrongcard');
-                        //save wrong card
+                        console.log('Unknown command');
                     }
-                });
-            } else if (data[2] === 'out') {
-                //TODO:
-            } else {
-                console.log('Unknown command');
-            }
+                } else {
+                    //Invalid card
+
+                    //Event -> 1. blik red led
+                    sendDataToArduino(port, 'wrongcard');
+                    //save wrong card
+                }
+            });
             break;
         default:
     }
