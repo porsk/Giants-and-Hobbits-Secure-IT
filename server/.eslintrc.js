@@ -10,6 +10,7 @@ module.exports = {
         sourceType: 'module',
     },
     rules: {
+        'no-console': 'off',
         'prettier/prettier': 'error',
         'linebreak-style': ['error', 'windows'],
         quotes: ['error', 'single'],
