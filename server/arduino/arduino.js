@@ -8,11 +8,6 @@ var controller = require('./controller');
     owner_name: 'Krisztian',
 });*/
 
-controller.validateCard('123456').then((data) => {
-    console.log(data[0]);
-    controller.updateCard(data[0]._id, Date.now(), 'active');
-});
-
 exports.establishConnection = () => {
     const port = new SerialPort('COM12', { baudRate: 9600 });
     const parser = port.pipe(new Readline({ delimiter: '\n' }));
@@ -38,14 +33,14 @@ function processIncomingEvent(data, port) {
                     //Valid card
                     if (action === 'in') {
                         //Event -> 1. message to display with name
-                        sendDataToArduino(port, 'showmessage|Hello ' + card[0].owner_name + '!');
+                        sendDataToArduino(port, 'showmessage|' + card[0].owner_name);
                         //Event -> 2. open door
                         sendDataToArduino(port, 'door|open');
                         //Update last usage date and status to active
-                        controller.updateCard(card[0]._id, Date.now(), 'active');
+                        controller.updateCard(card[0]._id, 'active');
                     } else if (action === 'out') {
                         //Update last usage date and status to inactive
-                        controller.updateCard(card[0]._id, Date.now(), 'inactive');
+                        controller.updateCard(card[0]._id, 'inactive');
                     } else {
                         console.log('Unknown command');
                     }
@@ -54,15 +49,29 @@ function processIncomingEvent(data, port) {
 
                     //Event -> 1. blik red led
                     sendDataToArduino(port, 'wrongcard');
-                    //save wrong card
+                    //TODO: Send notificaiton to phone
                 }
             });
+            break;
+        case 'motion':
             break;
         default:
     }
 }
 
+const MAX_DATA_LENGTH = 32;
+
 function sendDataToArduino(port, data) {
+    if (data.length > MAX_DATA_LENGTH) {
+        data = data.substring(0, MAX_DATA_LENGTH);
+    } else {
+        let len = data.length;
+
+        for (let i = data.length; i < MAX_DATA_LENGTH; i++) {
+            data += ' ';
+        }
+    }
+
     port.write(data + '\n', (err) => {
         if (err) {
             console.log('Error on write: ', err.message);

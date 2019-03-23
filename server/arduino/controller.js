@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 
 var Card = mongoose.model('Cards');
+var EntryHistory = mongoose.model('EntryHistorys');
 
 exports.validateCard = (card_key) => {
     return Card.find({ card_key }, (err, card) => {
@@ -12,22 +13,39 @@ exports.validateCard = (card_key) => {
     });
 };
 
-exports.updateCard = (id, last_usage, status) => {
+exports.updateCard = (_id, status) => {
     Card.findByIdAndUpdate(
-        id,
+        _id,
         {
-            last_usage,
+            last_usage: Date.now(),
             status,
         },
         (err, card) => {
             if (err) {
                 console.log(err);
             } else {
-                console.log(card);
+                addToEntryHistory(_id, card.owner_name, status === 'active' ? 'in' : 'out');
             }
         }
     );
 };
+
+function addToEntryHistory(card_id, owner_name, event) {
+    let entry = new EntryHistory({
+        card_id,
+        event,
+        owner_name,
+        date: Date.now(),
+    });
+
+    entry.save((err, entry) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(entry);
+        }
+    });
+}
 
 ////////////////Utils
 exports.addCard = (data) => {
@@ -35,7 +53,7 @@ exports.addCard = (data) => {
 
     card.save((err, card) => {
         if (err) {
-            console.log(error);
+            console.log(err);
         } else {
             console.log(card);
         }
