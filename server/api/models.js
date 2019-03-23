@@ -21,4 +21,55 @@ var CardSchema = new mongoose.Schema({
     },
 });
 
+var EntryHistorySchema = new mongoose.Schema({
+    card_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
+    event: {
+        type: String,
+        required: true,
+        enum: ['in', 'out'],
+    },
+    owner_name: {
+        type: String,
+        required: true,
+    },
+    date: {
+        type: Date,
+        default: Date.now(),
+    },
+});
+
+var HomeConfigurationSchema = new mongoose.Schema({
+    status: {
+        type: String,
+        required: true,
+        default: 'locked',
+        enum: ['locked', 'unlocked'],
+    },
+    motionSensor: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
+    flameSensor: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
+    imHomeSimulation: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
+    methaneSensor: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
+});
+
 module.exports = mongoose.model('Cards', CardSchema);
+module.exports = mongoose.model('EntryHistorys', EntryHistorySchema);
+module.exports = mongoose.model('HomeConfigurations', HomeConfigurationSchema);
