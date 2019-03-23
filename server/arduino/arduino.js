@@ -2,6 +2,7 @@ const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 
 var controller = require('./controller');
+var apiController = require('../api/controllers');
 
 /*controller.addCard({
     card_key: '123456',
@@ -10,7 +11,13 @@ var controller = require('./controller');
 
 exports.establishConnection = () => {
     const port = new SerialPort('COM12', { baudRate: 9600 });
+    const port2 = new SerialPort('COM3', { baudRate: 19200 });
     const parser = port.pipe(new Readline({ delimiter: '\n' }));
+    const parser2 = port2.pipe(new Readline({ delimiter: '\n' }));
+
+    port2.on('open', () => {
+        console.log('Serial port is open to the Arduino.');
+    });
 
     port.on('open', () => {
         console.log('Serial port is open to the Arduino.');
@@ -39,8 +46,12 @@ function processIncomingEvent(data, port) {
                         //Update last usage date and status to active
                         controller.updateCard(card[0]._id, 'active');
                     } else if (action === 'out') {
-                        //Update last usage date and status to inactive
-                        controller.updateCard(card[0]._id, 'inactive');
+                        setTimeout(() => {
+                            //Update last usage date and status to inactive
+                            controller.updateCard(card[0]._id, 'inactive');
+                            //Event -> 1. close the door
+                            sendDataToArduino(port, ['door', 'close']);
+                        }, 10 * 1000);
                     } else {
                         console.log('Unknown command');
                     }
@@ -48,8 +59,12 @@ function processIncomingEvent(data, port) {
                     //Invalid card
 
                     //Event -> 1. blik red led
-                    sendDataToArduino(port, ['wrongcard']);
+                    sendDataToArduino(port, ['card', 'wrong']);
                     //TODO: Send notificaiton to phone
+                    apiController.sendNotification(
+                        'Wrong card!',
+                        'Someone tried to unlock your house with an invalid card.'
+                    );
                 }
             });
             break;
