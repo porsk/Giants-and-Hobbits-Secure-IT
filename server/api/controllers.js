@@ -50,9 +50,13 @@ exports.sendNotification = (title, message) => {
 
     Promise.all(
         userSubscriptions.map((sub) => webpush.sendNotification(sub, JSON.stringify(notificationPayload)))
-    ).catch((err) => {
-        console.log('Notification sending error: ' + err.message);
-    });
+    )
+        .then((d) => {
+            console.log(d);
+        })
+        .catch((err) => {
+            console.log('Notification sending error: ' + err.message);
+        });
 };
 
 exports.getConfig = (req, res) => {
