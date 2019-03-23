@@ -1,4 +1,9 @@
+var mongoose = require('mongoose');
 var webpush = require('web-push');
+
+var Card = mongoose.model('Cards'),
+    EntryHistory = mongoose.model('EntryHistorys'),
+    HomeConfiguration = mongoose.model('HomeConfigurations');
 
 let userSubscriptions = [];
 const vapidKeys = {

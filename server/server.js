@@ -2,14 +2,14 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
-    webpush = require('web-push'),
-    cors = require('cors'),
-    router = require('./api/routes');
+    cors = require('cors');
 
 var port = process.env.PORT || 3000,
     mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/home-security';
 
 require('./api/models');
+
+var router = require('./api/routes');
 
 var app = express();
 

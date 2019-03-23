@@ -6,4 +6,6 @@ router.route('/notification').post(controller.subscribeNotification);
 
 router.route('/send').post(controller.sendNotification);
 
+router.route('/config').get(controller.getConfig);
+
 module.exports = router;
