@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 
-var Card = mongoose.model('Cards');
-var EntryHistory = mongoose.model('EntryHistorys');
+var Card = mongoose.model('Cards'),
+    EntryHistory = mongoose.model('EntryHistorys'),
+    HomeConfiguration = mongoose.model('HomeConfigurations');
 
 exports.validateCard = (card_key) => {
     return Card.find({ card_key }, (err, card) => {
@@ -25,6 +26,7 @@ exports.updateCard = (_id, status) => {
                 console.log(err);
             } else {
                 addToEntryHistory(_id, card.owner_name, status === 'active' ? 'in' : 'out');
+                updateHomeStatus(status === 'active' ? 'unlocked' : 'locked');
             }
         }
     );
@@ -45,6 +47,10 @@ function addToEntryHistory(card_id, owner_name, event) {
             console.log(entry);
         }
     });
+}
+
+function updateHomeStatus(status) {
+    HomeConfiguration.findOneAndUpdate({}, { status });
 }
 
 ////////////////Utils
