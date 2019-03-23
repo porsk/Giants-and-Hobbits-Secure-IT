@@ -52,4 +52,22 @@ exports.sendNotification = (req, res) => {
     res.status(200).json({ message: 'Messages sent successfully.' });
 };
 
-exports.getConfig = (req, res) => {};
+exports.getConfig = (req, res) => {
+    HomeConfiguration.find({}, (err, config) => {
+        if (err) {
+            res.status(500).json({ message: 'Something went wrong on our side.' });
+        } else {
+            res.status(200).json(config);
+        }
+    });
+};
+
+exports.updateConfig = (req, res) => {
+    HomeConfiguration.findOneAndUpdate({}, { $set: req.body }, (err, config) => {
+        if (err) {
+            res.status(500).json({ message: 'Something went wrong on our side.' });
+        } else {
+            res.status(200).json({ message: 'Config successfully updated.' });
+        }
+    });
+};
