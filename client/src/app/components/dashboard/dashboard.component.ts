@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpService } from "src/app/services/http/http.service";
+import { PushNotificationService } from '../../services/notifications/push-notification.service';
 
 @Component({
   selector: "app-dashboard",
@@ -9,11 +10,22 @@ import { HttpService } from "src/app/services/http/http.service";
 export class DashboardComponent implements OnInit {
   public homeConfig: any;
 
-  constructor(public http: HttpService) {}
+  constructor(
+      public http: HttpService,
+      public notificationService: PushNotificationService
+  ) {}
 
   ngOnInit() {
     this.http.getSensorData().subscribe(result => {
       this.homeConfig = result;
+    });
+
+    this.notificationService.alertNotification.subscribe((result) => {
+        if (result) {
+            this.http.getSensorData().subscribe(result => {
+                this.homeConfig = result;
+            });
+        }
     });
   }
 

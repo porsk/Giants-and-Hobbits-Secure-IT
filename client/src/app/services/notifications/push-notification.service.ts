@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { SwPush } from "@angular/service-worker";
 import { config } from "../../config";
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: "root"
@@ -9,6 +10,8 @@ import { config } from "../../config";
 export class PushNotificationService {
   private VAPID_PUBLIC_KEY: string =
     "BBChwbDE1N8AcV5R1FftCBxhleb9x8HvkBhSoa3Ze7UlA2WwqrkonE9gPLgX-RMJD5fpBql59jqV_2wFOnat9bo";
+
+  public alertNotification = new BehaviorSubject(false);
 
   constructor(private swPush: SwPush, private http: HttpClient) {
     this.subscribeToNotifications();
@@ -24,7 +27,7 @@ export class PushNotificationService {
             console.log("Subscription was succesful!");
             this.swPush.messages.subscribe((message: any) => {
                 if (message.notification.data.data.type == 'alert') {
-                    console.log("ALERT CAME");
+                    this.alertNotification.next(true);
                 }
             });
         });
