@@ -44,7 +44,7 @@ function addToEntryHistory(card_id, owner_name, event) {
         if (err) {
             console.log(err);
         } else {
-            console.log(entry);
+            console.log('New entry event: ' + entry.owner_name + ' - ' + entry.event);
         }
     });
 }

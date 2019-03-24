@@ -11,4 +11,6 @@ router
     .get(controller.getConfig)
     .put(controller.updateConfig);
 
+router.route('/entries/logs').get(controller.getEntries);
+
 module.exports = router;
