@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpService } from "src/app/services/http/http.service";
+import { PushNotificationService } from '../../services/notifications/push-notification.service';
 
 @Component({
   selector: "app-dashboard",
@@ -7,21 +8,56 @@ import { HttpService } from "src/app/services/http/http.service";
   styleUrls: ["./dashboard.component.scss"]
 })
 export class DashboardComponent implements OnInit {
-  private sensorConfig: any;
+  public homeConfig: any;
 
-  constructor(private http: HttpService) {}
+  constructor(
+      public http: HttpService,
+      public notificationService: PushNotificationService
+  ) {}
 
   ngOnInit() {
     this.http.getSensorData().subscribe(result => {
-      console.log(result);
-      this.sensorConfig = result;
+      this.homeConfig = result;
+    });
+
+    this.notificationService.alertNotification.subscribe((result) => {
+        if (result) {
+            this.http.getSensorData().subscribe(result => {
+                this.homeConfig = result;
+            });
+        }
     });
   }
 
-  //   click() {
-  //       this.http.post('http://localhost:3000/api/send', "valami")
-  //       .subscribe((result) => {
-  //           console.log(result);
-  //       });
-  //   }
+  updateFlameSensor(event: any) {
+      this.homeConfig.flameSensor = event.checked;
+      this.http.setSensorData(this.homeConfig)
+      .subscribe((result) => {
+          console.log(result);
+      });
+  }
+
+  updateImHomeSimulationSensor(event: any) {
+      this.homeConfig.imHomeSimulation = event.checked;
+      this.http.setSensorData(this.homeConfig)
+      .subscribe((result) => {
+          console.log(result);
+      });
+  }
+
+  updateMethaneSensor(event: any) {
+      this.homeConfig.methaneSensor = event.checked;
+      this.http.setSensorData(this.homeConfig)
+      .subscribe((result) => {
+          console.log(result);
+      });
+  }
+
+  updateMotionSensor(event: any) {
+      this.homeConfig.motionSensor = event.checked;
+      this.http.setSensorData(this.homeConfig)
+      .subscribe((result) => {
+          console.log(result);
+      });
+  }
 }

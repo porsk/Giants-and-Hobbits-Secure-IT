@@ -1,1 +1,12 @@
-<router-outlet></router-outlet>
+<header>
+  <span class="title">Secure-IT</span>
+</header>
+
+<main>
+    <router-outlet></router-outlet>
+</main>
+
+<footer>
+  <div (click)="router.navigate(['/dashboard'])" class="menu-button">Status</div>
+  <div (click)="router.navigate(['/entries'])" class="menu-button">Entries</div>
+</footer>

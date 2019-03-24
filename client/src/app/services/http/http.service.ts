@@ -15,4 +15,13 @@ export class HttpService {
   public setSensorData(data: any) {
     return this.http.put(config.apiURL + "/config", data);
   }
+
+    public getLastEntryLog() {
+        return this.http.get(config.apiURL + "/entries/logs?last=true");
+    }
+
+    public getAllEntryLogs() {
+        return this.http.get(config.apiURL + "/entries/logs?all=true");
+    }
+
 }

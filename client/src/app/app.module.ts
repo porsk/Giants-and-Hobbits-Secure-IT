@@ -9,16 +9,24 @@ import { PushNotificationService } from "./services/notifications/push-notificat
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { environment } from "../environments/environment";
 import { HttpService } from "./services/http/http.service";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { EntryListComponent } from './components/entry-list/entry-list.component';
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent],
+  declarations: [AppComponent, DashboardComponent, EntryListComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+
+    MatSlideToggleModule,
+
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
-    })
+    }),
+    BrowserAnimationsModule
   ],
   providers: [PushNotificationService, HttpService],
   bootstrap: [AppComponent]
