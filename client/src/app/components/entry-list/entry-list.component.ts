@@ -8,14 +8,13 @@ import { HttpService } from "src/app/services/http/http.service";
 })
 export class EntryListComponent implements OnInit {
 
-    private entries: any[];
+    public entries: any[];
 
-  constructor(private http: HttpService) { }
+  constructor(public http: HttpService) { }
 
   ngOnInit() {
       this.http.getAllEntryLogs().subscribe((result: any[]) => {
           this.entries = result;
-          console.log(this.entries);
       });
   }
 

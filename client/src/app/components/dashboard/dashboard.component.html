@@ -1,18 +1,16 @@
-
 <div class="home-status">
-<ng-template *ngIf="homeConfig?.status == 'locked' then locked else unlocked"></ng-template>
-<ng-template #locked>
-    <span>No one is at home.</span>
-</ng-template>
-<ng-template #unlocked>
-    <span>You are at home.</span>
-</ng-template>
+    <ng-template *ngIf="homeConfig?.status == 'locked' then locked else unlocked"></ng-template>
+    <ng-template #locked>
+        <span>No one is at home.</span>
+    </ng-template>
+    <ng-template #unlocked>
+        <span>You are at home.</span>
+    </ng-template>
 </div>
 
 <div class="flameSensor">
     <mat-slide-toggle
         class="example-margin"
-        [color]="blue"
         (change)="updateFlameSensor($event)"
         [checked]="homeConfig?.flameSensor">
     Flame sensor
@@ -22,7 +20,6 @@
 <div class="imHomeSimulation">
     <mat-slide-toggle
         class="example-margin"
-        [color]="blue"
         (change)="updateImHomeSimulationSensor($event)"
         [checked]="homeConfig?.imHomeSimulation">
     mittudomén sensor
@@ -32,7 +29,6 @@
 <div class="methaneSensor">
     <mat-slide-toggle
         class="example-margin"
-        [color]="blue"
         (change)="updateMethaneSensor($event)"
         [checked]="homeConfig?.methaneSensor">
     Methane sensor
@@ -42,7 +38,6 @@
 <div class="motionSensor">
     <mat-slide-toggle
         class="example-margin"
-        [color]="blue"
         (change)="updateMotionSensor($event)"
         [checked]="homeConfig?.motionSensor">
     Motion sensor

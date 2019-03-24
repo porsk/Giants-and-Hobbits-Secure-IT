@@ -21,7 +21,12 @@ export class PushNotificationService {
       })
       .then(sub => {
         this.addPushSubscriber(sub).subscribe(result => {
-          console.log("Subscription was succesful!");
+            console.log("Subscription was succesful!");
+            this.swPush.messages.subscribe((message: any) => {
+                if (message.notification.data.data.type == 'alert') {
+                    console.log("ALERT CAME");
+                }
+            });
         });
       })
       .catch(err => console.error("Could not subscribe to notifications", err));

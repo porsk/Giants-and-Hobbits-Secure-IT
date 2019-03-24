@@ -1,6 +1,8 @@
 <div class="list-container">
-    <div *ngFor="let entry of entries">
-        <span>Name: {{ entry.name }}</span>
+    <div class="list-row" *ngFor="let entry of entries">
+        <span>Name: {{ entry.owner_name }}</span>
         <span>Date: {{ entry.date }}</span>
+        <span>Event: {{ entry.event }}</span>
+        <br>
     </div>
 </div>

@@ -7,14 +7,13 @@ import { HttpService } from "src/app/services/http/http.service";
   styleUrls: ["./dashboard.component.scss"]
 })
 export class DashboardComponent implements OnInit {
-  private homeConfig: any;
+  public homeConfig: any;
 
-  constructor(private http: HttpService) {}
+  constructor(public http: HttpService) {}
 
   ngOnInit() {
     this.http.getSensorData().subscribe(result => {
       this.homeConfig = result;
-      console.log(this.homeConfig);
     });
   }
 
@@ -49,11 +48,4 @@ export class DashboardComponent implements OnInit {
           console.log(result);
       });
   }
-
-  //   click() {
-  //       this.http.post('http://localhost:3000/api/send', "valami")
-  //       .subscribe((result) => {
-  //           console.log(result);
-  //       });
-  //   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SwUpdate } from "@angular/service-worker";
 import { Router } from '@angular/router';
+import { PushNotificationService } from './services/notifications/push-notification.service';
 
 @Component({
     selector: 'app-root',
@@ -10,7 +11,8 @@ import { Router } from '@angular/router';
 export class AppComponent {
     constructor(
         private swUpdate: SwUpdate,
-        private router: Router
+        public router: Router,
+        public notificationService: PushNotificationService
     ) { }
 
     ngOnInit() {

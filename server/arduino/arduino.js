@@ -10,8 +10,8 @@ var apiController = require('../api/controllers');
 });*/
 
 exports.establishConnection = () => {
-    const acs = new SerialPort('COM12', { baudRate: 9600 });
-    const smc = new SerialPort('COM3', { baudRate: 9600 });
+    const acs = new SerialPort('COM3', { baudRate: 9600 });
+    const smc = new SerialPort('COM12', { baudRate: 9600 });
     const acsParser = acs.pipe(new Readline({ delimiter: '\n' }));
     const smcParser = smc.pipe(new Readline({ delimiter: '\n' }));
 
