@@ -13,9 +13,20 @@ var apiController = require('../api/controllers');
 //Add home configuration
 //controller.addHomeConfiguration();
 
+let acs = null;
+let smc = null;
+
+exports.setHomeStatusRemote = (name, status) => {
+    if (name === 'thief') {
+        sendDataToArduino(smc, ['light', name, status ? 'on' : 'off']);
+    } else if (name === 'evning') {
+        sendDataToArduino(smc, ['evning', name, status ? 'on' : 'off']);
+    }
+};
+
 exports.establishConnections = () => {
-    const acs = new SerialPort('COM12', { baudRate: 9600 });
-    const smc = new SerialPort('COM3', { baudRate: 9600 });
+    acs = new SerialPort('COM12', { baudRate: 9600 });
+    smc = new SerialPort('COM3', { baudRate: 9600 });
     const acsParser = acs.pipe(new Readline({ delimiter: '\n' }));
     const smcParser = smc.pipe(new Readline({ delimiter: '\n' }));
 
@@ -109,11 +120,6 @@ function processIncomingEventForSMC(data, smc, acs) {
         default:
     }
 }
-
-//in home: flame, methane -> event and push; set light mode to SMART LIGHTS
-//out home: motion, flame, methane -> event and push; set light mode to imHOMEsimulation
-
-function alertIfNecessary() {}
 
 function processIncomingEventForACS(data, asc, smc) {
     switch (data[0]) {
