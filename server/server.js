@@ -35,8 +35,7 @@ app.listen(port, () => {
 });
 
 var arduino = require('./arduino/arduino');
-
 //Connect to arduinos
-arduino.establishConnection();
+arduino.establishConnections();
 
 module.exports = app;
