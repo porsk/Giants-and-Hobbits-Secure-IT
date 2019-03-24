@@ -16,6 +16,10 @@ export class HttpService {
     return this.http.put(config.apiURL + "/config", data);
   }
 
+  public setHomeSimulation(data: any) {
+      return this.http.put(config.apiURL + "/config/simulation", data);
+  }
+
     public getLastEntryLog() {
         return this.http.get(config.apiURL + "/entries/logs?last=true");
     }
