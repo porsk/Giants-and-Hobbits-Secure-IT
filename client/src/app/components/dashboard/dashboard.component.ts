@@ -30,7 +30,8 @@ export class DashboardComponent implements OnInit {
   }
 
   updateOnAlertClose(type: string) {
-      this.http.setAlert(type)
+      this.homeConfig[type] = false;
+      this.http.setSensorData(this.homeConfig)
       .subscribe((result) => {
           console.log(result);
       });
