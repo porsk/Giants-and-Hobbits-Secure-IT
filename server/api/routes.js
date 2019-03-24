@@ -13,4 +13,6 @@ router
 
 router.route('/entries/logs').get(controller.getEntries);
 
+router.route('/events/logs').get(controller.getEvents);
+
 module.exports = router;

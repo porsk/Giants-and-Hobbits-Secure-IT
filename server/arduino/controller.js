@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 
 var Card = mongoose.model('Cards'),
     EntryHistory = mongoose.model('EntryHistorys'),
-    HomeConfiguration = mongoose.model('HomeConfigurations');
+    HomeConfiguration = mongoose.model('HomeConfigurations'),
+    EventHistory = mongoose.model('EventHistorys');
 
 exports.validateCard = (card_key) => {
     return Card.find({ card_key }, (err, card) => {
@@ -63,6 +64,7 @@ exports.activateMotionAlert = () => {
             console.log(e);
         }
     });
+    addToEventHistory('motion');
 };
 
 exports.activateFlameAlert = () => {
@@ -71,6 +73,7 @@ exports.activateFlameAlert = () => {
             console.log(e);
         }
     });
+    addToEventHistory('flame');
 };
 
 exports.activateMethaneAlert = () => {
@@ -79,6 +82,7 @@ exports.activateMethaneAlert = () => {
             console.log(e);
         }
     });
+    addToEventHistory('methane');
 };
 
 exports.getHomeStatus = () => {
@@ -91,6 +95,21 @@ exports.getHomeStatus = () => {
     });
 };
 
+function addToEventHistory(eventType) {
+    let event = new EventHistory({
+        eventType,
+        date: Date.now(),
+    });
+
+    event.save((err, event) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(event);
+        }
+    });
+}
+
 ////////////////Utils
 exports.addCard = (data) => {
     var card = new Card(data);
@@ -100,6 +119,27 @@ exports.addCard = (data) => {
             console.log(err);
         } else {
             console.log(card);
+        }
+    });
+};
+
+exports.addHomeConfiguration = () => {
+    var config = new HomeConfiguration({
+        status: 'locked',
+        motionSensor: true,
+        flameSensor: true,
+        imHomeSimulation: true,
+        methaneSensor: true,
+        motionAlert: false,
+        flameAlert: false,
+        methaneAlert: false,
+    });
+
+    config.save((err, config) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(config);
         }
     });
 };

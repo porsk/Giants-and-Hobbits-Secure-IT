@@ -4,12 +4,16 @@ const Readline = require('@serialport/parser-readline');
 var controller = require('./controller');
 var apiController = require('../api/controllers');
 
+//Add the valid card
 /*controller.addCard({
-    card_key: '123456',
+    card_key: '5a870f3b',
     owner_name: 'Krisztian',
 });*/
 
-exports.establishConnection = () => {
+//Add home configuration
+//controller.addHomeConfiguration();
+
+exports.establishConnections = () => {
     const acs = new SerialPort('COM3', { baudRate: 9600 });
     const smc = new SerialPort('COM4', { baudRate: 9600 });
     const acsParser = acs.pipe(new Readline({ delimiter: '\n' }));
@@ -30,17 +34,38 @@ exports.establishConnection = () => {
 
     smcParser.on('data', (data) => {
         console.log('From SMC (A2): ' + data);
-        processIncomingEventForSMC(data.trim().split('|'), smc);
+        processIncomingEventForSMC(data.trim().split('|'), smc, acs);
     });
 };
 
-function processIncomingEventForSMC(data, smc) {
+function checkIfAllAlarmsAreOff() {
+    console.log('check if alarm is off');
+    controller.getHomeStatus().then((config) => {
+        if (!config[0].motionAlert && !config[0].flameAlert && !config[0].methaneAlert) {
+            //All alarms are off
+            sendDataToArduino(acs, ['alert', 'stop']);
+        } else {
+            setTimeout(checkIfAllAlarmsAreOff, 1000);
+        }
+    });
+}
+
+function processIncomingEventForSMC(data, smc, acs) {
     switch (data[0]) {
         case 'alert':
-            switch (data[1]) {
-                case 'motion':
-                    controller.getHomeStatus().then((config) => {
-                        if (!config[0].motionAlert) {
+            controller.getHomeStatus().then((config) => {
+                let motionAlert = config[0].motionAlert,
+                    flameAlert = config[0].flameAlert,
+                    methaneAlert = config[0].methaneAlert;
+
+                if (!motionAlert && !flameAlert && !methaneAlert) {
+                    sendDataToArduino(acs, ['alert', 'start']);
+                    setTimeout(checkIfAllAlarmsAreOff, 1000);
+                }
+
+                switch (data[1]) {
+                    case 'motion':
+                        if (!motionAlert) {
                             console.log('motion alert activated');
                             controller.activateMotionAlert();
                             apiController.sendNotification(
@@ -49,24 +74,20 @@ function processIncomingEventForSMC(data, smc) {
                                 { type: 'alert' }
                             );
                         }
-                    });
 
-                    break;
-                case 'flame':
-                    controller.getHomeStatus().then((config) => {
-                        if (!config[0].flameAlert) {
+                        break;
+                    case 'flame':
+                        if (!flameAlert) {
                             console.log('flame alert activated');
                             controller.activateFlameAlert();
                             apiController.sendNotification('Fire alert!', 'Fire detected in the house!', {
                                 type: 'alert',
                             });
                         }
-                    });
 
-                    break;
-                case 'methane':
-                    controller.getHomeStatus().then((config) => {
-                        if (!config[0].methaneAlert) {
+                        break;
+                    case 'methane':
+                        if (!methaneAlert) {
                             console.log('methane alert activated');
                             controller.activateMethaneAlert();
                             apiController.sendNotification(
@@ -75,11 +96,10 @@ function processIncomingEventForSMC(data, smc) {
                                 { type: 'alert' }
                             );
                         }
-                    });
 
-                    break;
-            }
-
+                        break;
+                }
+            });
         default:
     }
 }

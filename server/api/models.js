@@ -85,6 +85,19 @@ var HomeConfigurationSchema = new mongoose.Schema({
     },
 });
 
+var EventHistorySchema = new mongoose.Schema({
+    eventType: {
+        type: String,
+        required: true,
+        enum: ['motion', 'flame', 'methane'],
+    },
+    date: {
+        type: Date,
+        default: Date.now(),
+    },
+});
+
 module.exports = mongoose.model('Cards', CardSchema);
 module.exports = mongoose.model('EntryHistorys', EntryHistorySchema);
 module.exports = mongoose.model('HomeConfigurations', HomeConfigurationSchema);
+module.exports = mongoose.model('EventHistorys', EventHistorySchema);

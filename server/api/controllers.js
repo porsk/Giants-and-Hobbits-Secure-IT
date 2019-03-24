@@ -3,7 +3,8 @@ var webpush = require('web-push');
 
 var Card = mongoose.model('Cards'),
     EntryHistory = mongoose.model('EntryHistorys'),
-    HomeConfiguration = mongoose.model('HomeConfigurations');
+    HomeConfiguration = mongoose.model('HomeConfigurations'),
+    EventHistory = mongoose.model('EventHistorys');
 
 let userSubscriptions = [];
 const vapidKeys = {
@@ -101,3 +102,21 @@ exports.getEntries = (req, res) => {
         });
     }
 };
+
+exports.getEvents = (req, res) => {
+    EventHistory.find({}, {}, { sort: { date: -1 } }, (err, events) => {
+        if (err) {
+            res.status(500).json({ message: 'Something went wrong on our side.' });
+        } else {
+            res.status(200).json(events);
+        }
+    });
+};
+
+/*exports.turnOffAlert = (req, res) => {
+    if (req.query.eventType != null && ['motion', 'flame', 'methane'].includes(req.query.eventType)) {
+        
+    } else {
+        req.status(400).json({ message: 'Wrong or missing query parameter.' });
+    }
+};*/
