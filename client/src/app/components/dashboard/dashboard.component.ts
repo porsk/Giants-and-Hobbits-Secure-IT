@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
 
   updateImHomeSimulationSensor(event: boolean) {
       this.homeConfig.imHomeSimulation = event;
-      this.http.setSensorData(this.homeConfig)
+      this.http.setHomeSimulation(this.homeConfig)
       .subscribe((result) => {
           console.log(result);
       });
