@@ -38,6 +38,18 @@ exports.establishConnections = () => {
     });
 };
 
+function checkIfAllAlarmsAreOff() {
+    console.log('check if alarm is off');
+    controller.getHomeStatus().then((config) => {
+        if (!config[0].motionAlert && !config[0].flameAlert && !config[0].methaneAlert) {
+            //All alarms are off
+            sendDataToArduino(acs, ['alert', 'stop']);
+        } else {
+            setTimeout(checkIfAllAlarmsAreOff, 1000);
+        }
+    });
+}
+
 function processIncomingEventForSMC(data, smc, acs) {
     switch (data[0]) {
         case 'alert':
@@ -47,7 +59,8 @@ function processIncomingEventForSMC(data, smc, acs) {
                     methaneAlert = config[0].methaneAlert;
 
                 if (!motionAlert && !flameAlert && !methaneAlert) {
-                    sendDataToArduino(acs, ['alert|start']);
+                    sendDataToArduino(acs, ['alert', 'start']);
+                    setTimeout(checkIfAllAlarmsAreOff, 1000);
                 }
 
                 switch (data[1]) {

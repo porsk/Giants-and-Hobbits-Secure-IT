@@ -91,11 +91,6 @@ var EventHistorySchema = new mongoose.Schema({
         required: true,
         enum: ['motion', 'flame', 'methane'],
     },
-    action: {
-        type: String,
-        required: true,
-        enum: ['on', 'off'],
-    },
     date: {
         type: Date,
         default: Date.now(),

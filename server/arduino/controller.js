@@ -64,7 +64,7 @@ exports.activateMotionAlert = () => {
             console.log(e);
         }
     });
-    addToEventHistory('motion', 'on');
+    addToEventHistory('motion');
 };
 
 exports.activateFlameAlert = () => {
@@ -73,7 +73,7 @@ exports.activateFlameAlert = () => {
             console.log(e);
         }
     });
-    addToEventHistory('flame', 'on');
+    addToEventHistory('flame');
 };
 
 exports.activateMethaneAlert = () => {
@@ -82,7 +82,7 @@ exports.activateMethaneAlert = () => {
             console.log(e);
         }
     });
-    addToEventHistory('methane', 'on');
+    addToEventHistory('methane');
 };
 
 exports.getHomeStatus = () => {
@@ -95,10 +95,9 @@ exports.getHomeStatus = () => {
     });
 };
 
-function addToEventHistory(eventType, action) {
+function addToEventHistory(eventType) {
     let event = new EventHistory({
         eventType,
-        action,
         date: Date.now(),
     });
 
