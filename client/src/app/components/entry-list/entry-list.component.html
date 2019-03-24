@@ -1,8 +1,8 @@
 <div class="list-container">
+    <h2>List of latest entries to the house</h2>
     <div class="list-row" *ngFor="let entry of entries">
-        <span>Name: {{ entry.owner_name }}</span>
-        <span>Date: {{ entry.date }}</span>
-        <span>Event: {{ entry.event }}</span>
-        <br>
+        <span class="date">{{ entry.date | date:'medium' }}</span>
+        <span *ngIf="entry.event == 'in'" class="text">{{ entry.owner_name }} went <b>in</b> to the house.</span>
+        <span *ngIf="entry.event == 'out'" class="text">{{ entry.owner_name }} went <b>out</b> of the house.</span>
     </div>
 </div>
