@@ -37,32 +37,32 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  updateFlameSensor(event: any) {
-      this.homeConfig.flameSensor = event.checked;
+  updateFlameSensor(event: boolean) {
+      this.homeConfig.flameSensor = event;
       this.http.setSensorData(this.homeConfig)
       .subscribe((result) => {
           console.log(result);
       });
   }
 
-  updateImHomeSimulationSensor(event: any) {
-      this.homeConfig.imHomeSimulation = event.checked;
+  updateImHomeSimulationSensor(event: boolean) {
+      this.homeConfig.imHomeSimulation = event;
       this.http.setSensorData(this.homeConfig)
       .subscribe((result) => {
           console.log(result);
       });
   }
 
-  updateMethaneSensor(event: any) {
-      this.homeConfig.methaneSensor = event.checked;
+  updateMethaneSensor(event: boolean) {
+      this.homeConfig.methaneSensor = event;
       this.http.setSensorData(this.homeConfig)
       .subscribe((result) => {
           console.log(result);
       });
   }
 
-  updateMotionSensor(event: any) {
-      this.homeConfig.motionSensor = event.checked;
+  updateMotionSensor(event: boolean) {
+      this.homeConfig.motionSensor = event;
       this.http.setSensorData(this.homeConfig)
       .subscribe((result) => {
           console.log(result);

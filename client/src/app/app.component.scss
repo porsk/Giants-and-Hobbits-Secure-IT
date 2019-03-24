@@ -3,32 +3,29 @@
   flex: 1;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
 }
 
 header {
   color: white;
-  background: #424c58;
+  background: #0f5169;
   font-weight: bold;
   font-size: 1.6em;
   padding: 20px 0;
   text-align: center;
 }
 
-
-
 main {
+    background: #F7F7F7;
   display: flex;
   flex-direction: column;
   flex: 1;
   overflow-y: auto;
 }
 
-
-
 footer {
-  background: #eee;
-  border-top: 1px solid #424c58;
-  color: #424c58;
+  background: #0F5169;
+  color: #FAFAFA;
   display: flex;
   justify-self: flex-end;
   margin-top: auto;
@@ -44,6 +41,6 @@ footer {
   }
 
   .menu-button:first-child {
-    border-right: 1px solid #424c58;
+    border-right: 1px solid #FAFAFA;
   }
 }

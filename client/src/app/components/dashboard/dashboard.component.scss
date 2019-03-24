@@ -1,6 +1,102 @@
 :host {
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex: 1;
-  height: 100vh;
+  height: 100%;
+  background: #F1f1f1;
+
+}
+
+.triggers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-status {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  padding: 25px 0;
+}
+
+.status-title {
+  font-size: 1.4em;
+}
+
+.status {
+    margin-top: 10px;
+  font-size: 1.2em;
+}
+
+.sensor-status-container {
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: white;
+  width: 100vw;
+
+  h2 {
+      margin-bottom: 20px;
+  }
+}
+
+.element {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+
+.switcher {
+  display: flex;
+  justify-content: center;
+  border-radius: 30px;
+  width: 25vw;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.sensor-name {
+  font-size: 1.4em;
+  margin-bottom: 10px;
+}
+
+.sensor-on {
+  background: #99D362;
+}
+
+.sensor-off {
+  background: #D7D7D7;
+}
+
+.alerts {
+    padding: 20px 0;
+    display: flex;
+    flex: 1;
+    width: 100vw;
+    flex-direction: row;
+    justify-content: center;
+
+    .alert-text {
+        font-size: 1.4em;
+    }
+
+    .alert-button {
+        color: white;
+        margin-left: 20px;
+        background: #FB3157;
+        outline: none;
+        border: none;
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 1.4em;
+    }
 }
