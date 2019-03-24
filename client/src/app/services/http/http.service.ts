@@ -12,6 +12,10 @@ export class HttpService {
     return this.http.get(config.apiURL + "/config");
   }
 
+  public setAlert(type: string) {
+      return this.http.post(config.apiURL + "/event/off?eventType=" + type, {});
+  }
+
   public setSensorData(data: any) {
     return this.http.put(config.apiURL + "/config", data);
   }

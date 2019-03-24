@@ -1,45 +1,61 @@
-<div class="home-status">
-    <ng-template *ngIf="homeConfig?.status == 'locked' then locked else unlocked"></ng-template>
-    <ng-template #locked>
-        <span>No one is at home.</span>
-    </ng-template>
-    <ng-template #unlocked>
-        <span>You are at home.</span>
-    </ng-template>
-</div>
+<div class="triggers">
+    <div class="home-status">
+        <ng-template *ngIf="homeConfig?.status == 'locked' then locked else unlocked"></ng-template>
+        <ng-template #locked>
+            <span>No one is at home.</span>
+        </ng-template>
+        <ng-template #unlocked>
+            <span>You are at home.</span>
+        </ng-template>
+    </div>
 
-<div class="flameSensor">
-    <mat-slide-toggle
-        class="example-margin"
-        (change)="updateFlameSensor($event)"
-        [checked]="homeConfig?.flameSensor">
-    Flame sensor
-    </mat-slide-toggle>
-</div>
+    <div class="flameSensor">
+        <mat-slide-toggle
+            class="example-margin"
+            (change)="updateFlameSensor($event)"
+            [checked]="homeConfig?.flameSensor">
+        Flame sensor
+        </mat-slide-toggle>
+    </div>
 
-<div class="imHomeSimulation">
-    <mat-slide-toggle
-        class="example-margin"
-        (change)="updateImHomeSimulationSensor($event)"
-        [checked]="homeConfig?.imHomeSimulation">
-    mittudomén sensor
-    </mat-slide-toggle>
-</div>
+    <div class="imHomeSimulation">
+        <mat-slide-toggle
+            class="example-margin"
+            (change)="updateImHomeSimulationSensor($event)"
+            [checked]="homeConfig?.imHomeSimulation">
+        mittudomén sensor
+        </mat-slide-toggle>
+    </div>
 
-<div class="methaneSensor">
-    <mat-slide-toggle
-        class="example-margin"
-        (change)="updateMethaneSensor($event)"
-        [checked]="homeConfig?.methaneSensor">
-    Methane sensor
-    </mat-slide-toggle>
-</div>
+    <div class="methaneSensor">
+        <mat-slide-toggle
+            class="example-margin"
+            (change)="updateMethaneSensor($event)"
+            [checked]="homeConfig?.methaneSensor">
+        Methane sensor
+        </mat-slide-toggle>
+    </div>
 
-<div class="motionSensor">
-    <mat-slide-toggle
-        class="example-margin"
-        (change)="updateMotionSensor($event)"
-        [checked]="homeConfig?.motionSensor">
-    Motion sensor
-    </mat-slide-toggle>
+    <div class="motionSensor">
+        <mat-slide-toggle
+            class="example-margin"
+            (change)="updateMotionSensor($event)"
+            [checked]="homeConfig?.motionSensor">
+        Motion sensor
+        </mat-slide-toggle>
+    </div>
+</div>
+<div *ngIf="homeConfig?.flameAlert || homeConfig?.methaneAlert || homeConfig?.motionAlert">
+    <div *ngIf="homeConfig?.flameAlert">
+        <span>Your house is on fire  </span>
+        <button (click)="updateOnAlertClose('flame')">close alert</button>
+    </div>
+    <div *ngIf="homeConfig?.methaneAlert">
+        <span>Gáz van alert  </span>
+        <button (click)="updateOnAlertClose('methane')">close alert</button>
+    </div>
+    <div *ngIf="homeConfig?.motionAlert">
+        <span>Motion alert  </span>
+        <button (click)="updateOnAlertClose('motion')">close alert</button>
+    </div>
 </div>

@@ -29,6 +29,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  updateOnAlertClose(type: string) {
+      this.http.setAlert(type)
+      .subscribe((result) => {
+          console.log(result);
+      });
+  }
+
   updateFlameSensor(event: any) {
       this.homeConfig.flameSensor = event.checked;
       this.http.setSensorData(this.homeConfig)
