@@ -14,8 +14,8 @@ var apiController = require('../api/controllers');
 //controller.addHomeConfiguration();
 
 exports.establishConnections = () => {
-    const acs = new SerialPort('COM3', { baudRate: 9600 });
-    const smc = new SerialPort('COM4', { baudRate: 9600 });
+    const acs = new SerialPort('COM12', { baudRate: 9600 });
+    const smc = new SerialPort('COM3', { baudRate: 9600 });
     const acsParser = acs.pipe(new Readline({ delimiter: '\n' }));
     const smcParser = smc.pipe(new Readline({ delimiter: '\n' }));
 
@@ -38,14 +38,14 @@ exports.establishConnections = () => {
     });
 };
 
-function checkIfAllAlarmsAreOff() {
+function checkIfAllAlarmsAreOff(acs) {
     console.log('check if alarm is off');
     controller.getHomeStatus().then((config) => {
         if (!config[0].motionAlert && !config[0].flameAlert && !config[0].methaneAlert) {
             //All alarms are off
             sendDataToArduino(acs, ['alert', 'stop']);
         } else {
-            setTimeout(checkIfAllAlarmsAreOff, 1000);
+            setTimeout(() => checkIfAllAlarmsAreOff(acs), 1000);
         }
     });
 }
@@ -59,8 +59,14 @@ function processIncomingEventForSMC(data, smc, acs) {
                     methaneAlert = config[0].methaneAlert;
 
                 if (!motionAlert && !flameAlert && !methaneAlert) {
-                    sendDataToArduino(acs, ['alert', 'start']);
-                    setTimeout(checkIfAllAlarmsAreOff, 1000);
+                    if (
+                        (data[1] === 'motion' && config[0].motionSensor) ||
+                        (data[1] === 'flame' && config[0].flameSensor) ||
+                        (data[1] === 'methane' && config[0].methaneSensor)
+                    ) {
+                        sendDataToArduino(acs, ['alert', 'start']);
+                        setTimeout(() => checkIfAllAlarmsAreOff(acs), 1000);
+                    }
                 }
 
                 switch (data[1]) {
