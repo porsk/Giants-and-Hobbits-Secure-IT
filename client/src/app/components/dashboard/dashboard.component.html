@@ -48,14 +48,14 @@
 <div *ngIf="homeConfig?.flameAlert || homeConfig?.methaneAlert || homeConfig?.motionAlert">
     <div *ngIf="homeConfig?.flameAlert">
         <span>Your house is on fire  </span>
-        <button (click)="updateOnAlertClose('flame')">close alert</button>
+        <button (click)="updateOnAlertClose('flameAlert')">close alert</button>
     </div>
     <div *ngIf="homeConfig?.methaneAlert">
         <span>Gáz van alert  </span>
-        <button (click)="updateOnAlertClose('methane')">close alert</button>
+        <button (click)="updateOnAlertClose('methaneAlert')">close alert</button>
     </div>
     <div *ngIf="homeConfig?.motionAlert">
         <span>Motion alert  </span>
-        <button (click)="updateOnAlertClose('motion')">close alert</button>
+        <button (click)="updateOnAlertClose('motionAlert')">close alert</button>
     </div>
 </div>
