@@ -50,8 +50,46 @@ function addToEntryHistory(card_id, owner_name, event) {
 }
 
 function updateHomeStatus(status) {
-    HomeConfiguration.findOneAndUpdate({}, { status });
+    HomeConfiguration.findOneAndUpdate({}, { status }, (e, d) => {
+        if (e) {
+            console.log(e);
+        }
+    });
 }
+
+exports.activateMotionAlert = () => {
+    HomeConfiguration.findOneAndUpdate({}, { motionAlert: true }, (e, d) => {
+        if (e) {
+            console.log(e);
+        }
+    });
+};
+
+exports.activateFlameAlert = () => {
+    HomeConfiguration.findOneAndUpdate({}, { flameAlert: true }, (e, d) => {
+        if (e) {
+            console.log(e);
+        }
+    });
+};
+
+exports.activateMethaneAlert = () => {
+    HomeConfiguration.findOneAndUpdate({}, { methaneAlert: true }, (e, d) => {
+        if (e) {
+            console.log(e);
+        }
+    });
+};
+
+exports.getHomeStatus = () => {
+    return HomeConfiguration.find({}, (err, config) => {
+        if (err) {
+            console.log(err);
+        } else {
+            return config;
+        }
+    });
+};
 
 ////////////////Utils
 exports.addCard = (data) => {

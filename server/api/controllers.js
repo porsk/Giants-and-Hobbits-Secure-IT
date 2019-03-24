@@ -28,7 +28,7 @@ exports.subscribeNotification = (req, res) => {
     res.status(200).json({ message: 'Subscription added successfully.' });
 };
 
-exports.sendNotification = (title, message) => {
+exports.sendNotification = (title, message, data) => {
     const notificationPayload = {
         notification: {
             title: title,
@@ -38,6 +38,7 @@ exports.sendNotification = (title, message) => {
             data: {
                 dateOfArrival: Date.now(),
                 primaryKey: 1,
+                data,
             },
             actions: [
                 {

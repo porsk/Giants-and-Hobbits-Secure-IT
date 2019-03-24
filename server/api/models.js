@@ -53,10 +53,20 @@ var HomeConfigurationSchema = new mongoose.Schema({
         required: true,
         default: true,
     },
+    motionAlert: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
     flameSensor: {
         type: Boolean,
         required: true,
         default: true,
+    },
+    flameAlert: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
     imHomeSimulation: {
         type: Boolean,
@@ -67,6 +77,11 @@ var HomeConfigurationSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: true,
+    },
+    methaneAlert: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
 });
 

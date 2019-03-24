@@ -36,15 +36,50 @@ exports.establishConnection = () => {
 
 function processIncomingEventForSMC(data, smc) {
     switch (data[0]) {
-        case 'motion':
-            //TODO
-            break;
+        case 'alert':
+            switch (data[1]) {
+                case 'motion':
+                    controller.getHomeStatus().then((config) => {
+                        if (!config[0].motionAlert) {
+                            console.log('motion alert activated');
+                            controller.activateMotionAlert();
+                            apiController.sendNotification(
+                                'Motion alert!',
+                                'Motion detected in the ' + (data[2] === '1' ? 'kitchen' : 'bedroom') + '!',
+                                { type: 'motion' }
+                            );
+                        }
+                    });
 
-        case 'flame':
-            break;
+                    break;
+                case 'flame':
+                    controller.getHomeStatus().then((config) => {
+                        if (!config[0].flameAlert) {
+                            console.log('flame alert activated');
+                            controller.activateFlameAlert();
+                            apiController.sendNotification('Fire alert!', 'Fire detected in the house!', {
+                                type: 'flame',
+                            });
+                        }
+                    });
 
-        case 'methane':
-            break;
+                    break;
+                case 'methane':
+                    controller.getHomeStatus().then((config) => {
+                        if (!config[0].methaneAlert) {
+                            console.log('methane alert activated');
+                            controller.activateMethaneAlert();
+                            apiController.sendNotification(
+                                'Methane leakage alert!',
+                                'Methane leakage detected in the house!',
+                                { type: 'methane' }
+                            );
+                        }
+                    });
+
+                    break;
+            }
+
         default:
     }
 }
@@ -88,7 +123,8 @@ function processIncomingEventForACS(data, asc, smc) {
                         //TODO: Send notificaiton to phone
                         apiController.sendNotification(
                             'Wrong card!',
-                            'Someone tried to unlock your house with an invalid card.'
+                            'Someone tried to unlock your house with an invalid card.',
+                            { type: 'card' }
                         );
                     }
                 }
