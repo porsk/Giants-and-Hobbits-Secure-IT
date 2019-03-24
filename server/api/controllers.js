@@ -52,7 +52,7 @@ exports.sendNotification = (title, message) => {
         userSubscriptions.map((sub) => webpush.sendNotification(sub, JSON.stringify(notificationPayload)))
     )
         .then((d) => {
-            console.log(d);
+            //console.log(d);
         })
         .catch((err) => {
             console.log('Notification sending error: ' + err.message);
@@ -64,7 +64,7 @@ exports.getConfig = (req, res) => {
         if (err) {
             res.status(500).json({ message: 'Something went wrong on our side.' });
         } else {
-            res.status(200).json(config);
+            res.status(200).json(config[0]);
         }
     });
 };
@@ -77,4 +77,26 @@ exports.updateConfig = (req, res) => {
             res.status(200).json({ message: 'Config successfully updated.' });
         }
     });
+};
+
+exports.getEntries = (req, res) => {
+    if (req.query.last != null) {
+        //Return only the last entry
+        EntryHistory.findOne({}, {}, { sort: { date: -1 } }, (err, entry) => {
+            if (err) {
+                res.status(500).json({ message: 'Something went wrong on our side.' });
+            } else {
+                res.status(200).json({ name: entry.owner_name, date: entry.date });
+            }
+        });
+    } else if (req.query.all != null) {
+        //Return all entry log
+        EntryHistory.find({}, {}, { sort: { date: -1 } }, (err, entries) => {
+            if (err) {
+                res.status(500).json({ message: 'Something went wrong on our side.' });
+            } else {
+                res.status(200).json(entries);
+            }
+        });
+    }
 };
