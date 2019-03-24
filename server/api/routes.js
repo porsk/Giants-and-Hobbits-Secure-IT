@@ -6,7 +6,7 @@ router.route('/notification').post(controller.subscribeNotification);
 
 router.route('/send').post(controller.sendNotification);
 
-router.route('/config/simulation').get(controller.toggleSimulation);
+router.route('/config/simulation').put(controller.toggleSimulation);
 
 router
     .route('/config')
