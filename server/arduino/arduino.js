@@ -65,7 +65,7 @@ function processIncomingEventForSMC(data, smc, acs) {
 
                 switch (data[1]) {
                     case 'motion':
-                        if (!motionAlert) {
+                        if (!motionAlert && config[0].motionSensor) {
                             console.log('motion alert activated');
                             controller.activateMotionAlert();
                             apiController.sendNotification(
@@ -77,7 +77,7 @@ function processIncomingEventForSMC(data, smc, acs) {
 
                         break;
                     case 'flame':
-                        if (!flameAlert) {
+                        if (!flameAlert && config[0].flameSensor) {
                             console.log('flame alert activated');
                             controller.activateFlameAlert();
                             apiController.sendNotification('Fire alert!', 'Fire detected in the house!', {
@@ -87,7 +87,7 @@ function processIncomingEventForSMC(data, smc, acs) {
 
                         break;
                     case 'methane':
-                        if (!methaneAlert) {
+                        if (!methaneAlert && config[0].methaneSensor) {
                             console.log('methane alert activated');
                             controller.activateMethaneAlert();
                             apiController.sendNotification(
