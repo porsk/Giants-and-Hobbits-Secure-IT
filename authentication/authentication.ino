@@ -16,7 +16,7 @@ String showmessage = "";
 String hello = "";
 String card_number = "";
 bool sent = false;
-bool okUser = true;
+bool okUser = false;
 int ledPin = 8;
 int buzzPin = 6;
 
@@ -60,22 +60,35 @@ void print_card_value(){
   char readFromServer[32];
   if(Serial.available()>0){
     Serial.readBytes(readFromServer,32);
-    String fromServer = String(readFromServer); 
+    String fromServer = String(readFromServer);
+    if(getValue(fromServer, '|', 0).equals("alert")){
+      if(getValue(fromServer, '|', 1).equals("start")){
+          digitalWrite(buzzPin, HIGH);
+      }
+      if(getValue(fromServer, '|', 1).equals("stop")){
+          digitalWrite(buzzPin, LOW);
+      }
+    }
+    
     if(getValue(fromServer, '|', 0).equals("showmessage")){       
         hello = "Hello"; 
         showmessage = getValue(fromServer, '|', 1);
         showmessage += "!";        
         okUser = true;
-      }
-      if((getValue(fromServer, '|', 0).equals("card")) && (getValue(fromServer, '|', 1).equals("wrong"))){
-        for(int i=0; i<3; i++){
+    }
+    if((getValue(fromServer, '|', 0).equals("card")) && (getValue(fromServer, '|', 1).equals("wrong"))){
+      for(int i=0; i<3; i++){
           digitalWrite(ledPin, HIGH);
-          delay(500);
+          delay(250);
           digitalWrite(ledPin, LOW);
-          delay(500);    
+          delay(250); 
+          analogWrite(buzzPin, 100);
+          delay(125);
+          analogWrite(buzzPin, 0);
+          delay(125);    
         }          
-      }
-      fromServer = "";
+     }
+     fromServer = "";
   }
     
 }
@@ -127,8 +140,23 @@ void communicate_with_slave(){
 }
 
 void loop() { 
+
+  
   
   if ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial() ) {
+    char readFromServer[32];
+    if(Serial.available()>0){
+    Serial.readBytes(readFromServer,32);
+    String fromServer = String(readFromServer);
+      if(getValue(fromServer, '|', 0).equals("alert")){
+        if(getValue(fromServer, '|', 1).equals("start")){
+            digitalWrite(buzzPin, HIGH);
+        }
+        if(getValue(fromServer, '|', 1).equals("stop")){
+            digitalWrite(buzzPin, LOW);
+        }
+      }
+    }
     lcd.clear();
     if(!card_number.equals("")){
       String string = "card|";
@@ -140,6 +168,7 @@ void loop() {
       card_number = "";
       sent = false;
       buzz();
+      okUser = false;
     } 
     return;
   }
