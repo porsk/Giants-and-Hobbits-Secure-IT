@@ -15,7 +15,7 @@ var apiController = require('../api/controllers');
 
 exports.establishConnections = () => {
     const acs = new SerialPort('COM3', { baudRate: 9600 });
-    const smc = new SerialPort('COM12', { baudRate: 9600 });
+    const smc = new SerialPort('COM4', { baudRate: 9600 });
     const acsParser = acs.pipe(new Readline({ delimiter: '\n' }));
     const smcParser = smc.pipe(new Readline({ delimiter: '\n' }));
 
@@ -71,7 +71,7 @@ function processIncomingEventForSMC(data, smc, acs) {
                             apiController.sendNotification(
                                 'Motion alert!',
                                 'Motion detected in the ' + (data[2] === '1' ? 'kitchen' : 'bedroom') + '!',
-                                { type: 'motion' }
+                                { type: 'alert' }
                             );
                         }
 
@@ -81,7 +81,7 @@ function processIncomingEventForSMC(data, smc, acs) {
                             console.log('flame alert activated');
                             controller.activateFlameAlert();
                             apiController.sendNotification('Fire alert!', 'Fire detected in the house!', {
-                                type: 'flame',
+                                type: 'alert',
                             });
                         }
 
@@ -93,7 +93,7 @@ function processIncomingEventForSMC(data, smc, acs) {
                             apiController.sendNotification(
                                 'Methane leakage alert!',
                                 'Methane leakage detected in the house!',
-                                { type: 'methane' }
+                                { type: 'alert' }
                             );
                         }
 
