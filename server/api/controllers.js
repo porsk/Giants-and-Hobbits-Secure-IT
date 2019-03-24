@@ -71,7 +71,30 @@ exports.getConfig = (req, res) => {
     });
 };
 
+var aController = require('../arduino/arduino');
+
+exports.toggleSimulation = (req, res) => {
+    HomeConfiguration.findOneAndUpdate({}, { $set: req.body }, (err, config) => {
+        if (err) {
+            res.status(500).json({ message: 'Something went wrong on our side.' });
+        } else {
+            console.log('home simulation change: ' + req.body.imHomeSimulation);
+            aController.setHomeStatusRemote('thief', req.body.imHomeSimulation);
+            res.status(200).json({ message: 'Config successfully updated.' });
+        }
+    });
+};
+
 exports.updateConfig = (req, res) => {
+    /*if (req.body.imHomeSimulation != null) {
+        console.log('home simulation change: ' + req.body.imHomeSimulation);
+        aController.setHomeStatusRemote('thief', req.body.imHomeSimulation);
+    }
+    if (req.body.lightcont != null) {
+        console.log('light controll change: ' + req.body.lightcont);
+        aController.setHomeStatusRemote('evning', req.body.lightcont);
+    }*/
+
     HomeConfiguration.findOneAndUpdate({}, { $set: req.body }, (err, config) => {
         if (err) {
             res.status(500).json({ message: 'Something went wrong on our side.' });
