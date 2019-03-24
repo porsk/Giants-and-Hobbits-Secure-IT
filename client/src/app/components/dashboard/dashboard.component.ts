@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpService } from "src/app/services/http/http.service";
 import { PushNotificationService } from '../../services/notifications/push-notification.service';
+import { timer } from 'rxjs';
 
 @Component({
   selector: "app-dashboard",
@@ -26,6 +27,15 @@ export class DashboardComponent implements OnInit {
                 this.homeConfig = result;
             });
         }
+    });
+
+    setTimeout(() => this.timer(), 1000);
+  }
+
+  timer() {
+      this.http.getSensorData().subscribe(result => {
+        this.homeConfig = result;
+        setTimeout(() => this.timer(), 1000);
     });
   }
 

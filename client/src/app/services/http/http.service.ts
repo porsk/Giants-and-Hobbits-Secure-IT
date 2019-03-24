@@ -17,15 +17,14 @@ export class HttpService {
   }
 
   public setHomeSimulation(data: any) {
-      return this.http.put(config.apiURL + "/config/simulation", data);
+    return this.http.put(config.apiURL + "/config/simulation", data);
   }
 
-    public getLastEntryLog() {
-        return this.http.get(config.apiURL + "/entries/logs?last=true");
-    }
+  public getLastEntryLog() {
+    return this.http.get(config.apiURL + "/entries/logs?last=true");
+  }
 
-    public getAllEntryLogs() {
-        return this.http.get(config.apiURL + "/entries/logs?all=true");
-    }
-
+  public getAllEntryLogs() {
+    return this.http.get(config.apiURL + "/entries/logs?all=true");
+  }
 }
